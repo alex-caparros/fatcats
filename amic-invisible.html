@@ -1,47 +1,53 @@
 <!DOCTYPE html>
 <html lang="ca"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>🎄 Amic invisible</title>
+<title>Amic invisible</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#f2f6f3;--paper:#ffffff;--ink:#182c20;--mute:#5a7364;--line:#cfe0d5;--acc:#c82829;--grn:#1b5e3a;--gold:#c59b27;--chip:#e4efe8;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:dark){:root{--bg:#0d1912;--paper:#15271d;--ink:#eef5f0;--mute:#8ca696;--line:#264031;--acc:#e64848;--grn:#52b788;--gold:#e5b842;--chip:#1f372a}}
-*{box-sizing:border-box}
-body{margin:0;background-color:var(--bg);background-image:radial-gradient(var(--line) 1px,transparent 1px),radial-gradient(var(--line) 1px,transparent 1px);background-size:32px 32px;background-position:0 0,16px 16px;color:var(--ink);font:16px/1.4 'DM Sans',system-ui,sans-serif}
-body::before{content:"";display:block;height:6px;background:repeating-linear-gradient(45deg,var(--acc) 0 12px,#fff 12px 24px,var(--grn) 24px 36px,#fff 36px 48px)}
+:root{--bg:#f6efe4;--paper:#fffdf8;--ink:#2a2420;--mute:#8a8070;--line:#e0d4c0;--acc:#b8312f;--grn:#2f6b4a;--chip:#f0e6d2;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root{--bg:#1c1816;--paper:#27221f;--ink:#f3ebdc;--mute:#9c9283;--line:#3b342e;--acc:#ee7a6e;--grn:#7cc79c;--chip:#332d28}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.4 'DM Sans',system-ui,sans-serif}
 main{max-width:520px;margin:0 auto;padding:18px 14px 60px}
-h1{font:700 24px 'Space Mono',monospace;margin:6px 0 4px;color:var(--acc)}.sub{color:var(--mute);font-size:14px;margin:4px 0 14px}
-h2{font:700 12px 'Space Mono',monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--grn);margin:22px 0 8px}
+h1{font:700 24px 'Space Mono',monospace;margin:6px 0 4px}.sub{color:var(--mute);font-size:14px;margin:4px 0 14px}
+h2{font:700 12px 'Space Mono',monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--mute);margin:22px 0 8px}
 .chips{display:flex;flex-wrap:wrap;gap:8px}
-.chip{border:1.5px solid var(--line);background:var(--paper);color:var(--ink);border-radius:999px;padding:9px 16px;font:500 15px 'DM Sans',sans-serif;cursor:pointer;transition:transform .1s,border-color .15s}
-.chip:active{transform:scale(.98)}
-.chip.on{background:var(--grn);color:#fff;border-color:var(--grn)}.chip.pri{background:var(--acc);border-color:var(--acc);color:#fff;font-weight:700;box-shadow:0 2px 8px rgba(200,40,41,.25)}
-.card{background:var(--paper);border:1.5px solid var(--line);border-radius:14px;padding:15px;box-shadow:0 4px 16px rgba(0,0,0,.04)}
-input,textarea{width:100%;font:16px 'DM Sans',sans-serif;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:11px 12px;margin:6px 0}
-input:focus,textarea:focus{outline:2px solid var(--grn);border-color:transparent}
-textarea{resize:vertical}
-.wl{background:var(--chip);border:1px dashed var(--gold);border-radius:10px;padding:12px;text-align:left;font-size:15px;margin-top:4px}
-.note{background:var(--chip);border-left:4px solid var(--gold);border-radius:8px;padding:10px 12px;font-size:13px;margin:0 0 12px}
-.g{margin:10px 0 2px;font:700 13px 'Space Mono',monospace;color:var(--grn)}.p{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px dashed var(--line)}
-.x{border:0;background:none;color:var(--acc);font-size:18px;cursor:pointer;padding:2px 6px}
-.x.ed{color:var(--mute);font-size:16px}
+.chip{border:1.5px solid var(--line);background:var(--paper);color:var(--ink);border-radius:999px;padding:9px 16px;font:500 15px 'DM Sans',sans-serif;cursor:pointer}
+.chip.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}.chip.pri{background:var(--acc);border-color:var(--acc);color:#fff;font-weight:700}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:14px}
+input{width:100%;font:16px 'DM Sans',sans-serif;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:11px 12px;margin:6px 0}
+textarea{width:100%;font:16px 'DM Sans',sans-serif;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:11px 12px;margin:6px 0;resize:vertical}
+.wl{background:var(--chip);border-radius:10px;padding:12px;text-align:left;font-size:15px;margin-top:4px}
+.note{background:var(--chip);border-radius:8px;padding:10px 12px;font-size:13px;margin:0 0 12px}
+.g{margin:10px 0 2px;font:700 13px 'Space Mono',monospace;color:var(--grn)}.p{display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px dashed var(--line)}
+.x{border:0;background:none;color:var(--acc);font-size:18px;cursor:pointer}
 .big{font:700 30px 'Space Mono',monospace;text-align:center;margin:14px 0;color:var(--acc)}.c{text-align:center}
 </style></head><body><main>
-<h1>🎄 Amic invisible</h1><div id="msg"></div><div id="app"></div>
-<h2>🎅 Administrador</h2><div id="adm"></div>
+<h1>🎁 Amic invisible</h1><div id="msg"></div><div id="app"></div>
+<h2>Administrador</h2><div id="adm"></div>
 </main>
 <script>
 const DB="https://canut-compartit-default-rtdb.europe-west1.firebasedatabase.app/sa";
 const $=id=>document.getElementById(id);
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-let S={people:{},draw:null,pin:null},me=null,admin=false,sel=null,dn="",df="",shown=false,dw="",mwd=null;
-let ae=null,an="",asel=null,af="",aw="";
+let S={people:{},draw:null,pin:null},me=null,admin=false,sel=null,dn="",df="",shown=false,dw="",mwd=null,dp="",res=null;
 try{me=localStorage.getItem("sa-me")}catch(e){}
 const fail=()=>{$("msg").innerHTML=`<p class="note">⚠️ No s'ha pogut desar. Revisa la connexió.</p>`};
 const call=(p,m,v)=>fetch(DB+"/"+p+".json",{method:m,body:v===undefined?undefined:JSON.stringify(v)}).then(r=>{if(!r.ok)throw 0;$("msg").innerHTML=""}).catch(fail);
 const ppl=()=>Object.entries(S.people).map(([id,v])=>({id,n:v.n,f:v.f}));
 const nuc=()=>[...new Set(ppl().map(p=>p.f))].sort((a,b)=>a.localeCompare(b));
 const sha=async s=>[...new Uint8Array(await crypto.subtle.digest("SHA-256",new TextEncoder().encode("sa:"+s)))].map(x=>x.toString(16).padStart(2,"0")).join("");
+//CRYPTO
+const b64=a=>btoa(String.fromCharCode(...new Uint8Array(a)));
+const ub=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
+async function kd(pin,salt){const k=await crypto.subtle.importKey("raw",new TextEncoder().encode(pin),"PBKDF2",false,["deriveKey"]);return crypto.subtle.deriveKey({name:"PBKDF2",salt,iterations:200000,hash:"SHA-256"},k,{name:"AES-GCM",length:256},false,["encrypt","decrypt"])}
+async function mk(pin){const kp=await crypto.subtle.generateKey({name:"RSA-OAEP",modulusLength:2048,publicExponent:new Uint8Array([1,0,1]),hash:"SHA-256"},true,["encrypt","decrypt"]);
+ const pk=JSON.stringify(await crypto.subtle.exportKey("jwk",kp.publicKey)),pr=await crypto.subtle.exportKey("pkcs8",kp.privateKey);
+ const salt=crypto.getRandomValues(new Uint8Array(16)),iv=crypto.getRandomValues(new Uint8Array(12));
+ const ct=await crypto.subtle.encrypt({name:"AES-GCM",iv},await kd(pin,salt),pr);
+ return{pk,sk:b64(salt)+"."+b64(iv)+"."+b64(ct)}}
+async function opn(p,pin){try{const[s,i,c]=p.sk.split(".").map(ub);const pr=await crypto.subtle.decrypt({name:"AES-GCM",iv:i},await kd(pin,s),c);return await crypto.subtle.importKey("pkcs8",pr,{name:"RSA-OAEP",hash:"SHA-256"},false,["decrypt"])}catch(e){return null}}
+const enc=async(pk,t)=>b64(await crypto.subtle.encrypt({name:"RSA-OAEP"},await crypto.subtle.importKey("jwk",JSON.parse(pk),{name:"RSA-OAEP",hash:"SHA-256"},false,["encrypt"]),new TextEncoder().encode(t)));
+//ENDCRYPTO
 function makeDraw(){const P=ppl(),n=P.length;if(n<2)return null;const g={};P.forEach(p=>g[p.f]=(g[p.f]||0)+1);const gm=Math.max(...Object.values(g));if(gm*2>n)return null;
  const R=()=>{const b=new Uint32Array(1);crypto.getRandomValues(b);return b[0]/4294967296};
  const sh=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(R()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
@@ -52,64 +58,51 @@ function makeDraw(){const P=ppl(),n=P.length;if(n<2)return null;const g={};P.for
 function byNuc(){const o={};ppl().forEach(p=>(o[p.f]=o[p.f]||[]).push(p));return o}
 function render(){
  const m=S.people[me];if(me&&!m)me=null;
- if(ae&&ae!=="__new"&&!S.people[ae])ae=null;
  let h="";
  if(!me){
-  h+=S.draw?`<p class="note">❄️ El sorteig ja s'ha fet: només pots entrar si ja t'havies apuntat.</p>`:`<h2>✨ Apunta't</h2><div class="card"><label>El teu nom</label><input id="nm" placeholder="Nom" value="${esc(dn)}"><label style="display:block;margin-top:8px">El teu nucli familiar</label><div class="chips" style="margin:6px 0">${nuc().map(f=>`<button class="chip${sel===f?" on":""}" data-f="${esc(f)}">${esc(f)}</button>`).join("")}<button class="chip${sel==="__new"?" on":""}" data-f="__new">＋ Nou nucli</button></div>${sel==="__new"?`<input id="nf" placeholder="Nom del nou nucli (p. ex. Família Pons)" value="${esc(df)}">`:""}<label style="display:block;margin-top:8px">Què t'agradaria rebre? (opcional)</label><textarea id="dw" rows="3" placeholder="Llibres, un joc de taula, te...">${esc(dw)}</textarea><button class="chip pri" id="go" style="width:100%;margin-top:8px">🎁 Apunta'm</button></div>`;
-  const P=ppl();if(P.length)h+=`<h2>🦌 Ja m'havia apuntat</h2><div class="chips">${P.map(p=>`<button class="chip" data-me="${p.id}">${esc(p.n)}</button>`).join("")}</div>`;
+  h+=S.draw?`<p class="note">El sorteig ja s'ha fet: només pots entrar si ja t'havies apuntat.</p>`:`<h2>Apunta't</h2><div class="card"><label>El teu nom</label><input id="nm" placeholder="Nom" value="${esc(dn)}"><label style="display:block;margin-top:8px">El teu nucli familiar</label><div class="chips" style="margin:6px 0">${nuc().map(f=>`<button class="chip${sel===f?" on":""}" data-f="${esc(f)}">${esc(f)}</button>`).join("")}<button class="chip${sel==="__new"?" on":""}" data-f="__new">＋ Nou nucli</button></div>${sel==="__new"?`<input id="nf" placeholder="Nom del nou nucli (p. ex. Família Pons)" value="${esc(df)}">`:""}<label style="display:block;margin-top:8px">Crea un PIN (mínim 4 caràcters)</label><input id="pn" type="password" autocomplete="new-password" placeholder="PIN" value="${esc(dp)}"><p class="sub" style="margin:0">El necessitaràs per tornar a entrar i veure el teu amic invisible. Si l'oblides, l'administrador t'haurà d'esborrar i repetir el sorteig.</p><label style="display:block;margin-top:8px">Què t'agradaria rebre? (opcional)</label><textarea id="dw" rows="3" placeholder="Llibres, un joc de taula, te...">${esc(dw)}</textarea><button class="chip pri" id="go" style="width:100%;margin-top:8px">Apunta'm</button></div>`;
+  const P=ppl();if(P.length)h+=`<h2>Ja m'havia apuntat</h2><div class="chips">${P.map(p=>`<button class="chip" data-me="${p.id}">${esc(p.n)}</button>`).join("")}</div>`;
  }else{
   h+=`<p class="sub">Hola, <b>${esc(m.n)}</b> · ${esc(m.f)} · <a href="#" id="out" style="color:var(--mute)">no sóc jo</a></p>`;
-  if(S.draw){const t=S.people[S.draw[me]];
-   h+=`<div class="card c"><p class="sub" style="margin:0">❄️ El sorteig ja s'ha fet</p>${shown?`<div class="big">🎁 ${t?esc(t.n):"?"}</div><p class="sub" style="margin:0">és el teu amic invisible 🤫</p>${t&&t.w?`<h2 style="text-align:left">✨ Què li agradaria rebre</h2><div class="wl">${esc(t.w).replace(/\n/g,"<br>")}</div>`:`<p class="sub">Encara no ha afegit cap idea de regal.</p>`}<button class="chip" id="hide" style="margin-top:12px">Amaga</button>`:`<button class="chip pri" id="show" style="margin:14px 0 4px">🎄 Veure a qui li faig el regal</button>`}</div>`}
-  else h+=`<div class="card"><p style="margin:0 0 6px">🎄 Estàs apuntat/da. Quan l'administrador faci el sorteig, aquí et sortirà a qui li has de fer el regal.</p><p class="sub" style="margin:0">Apuntats fins ara: <b>${ppl().length}</b></p></div>`;
-  h+=`<h2>✨ La meva llista de desitjos</h2><div class="card"><p class="sub" style="margin-top:0">Escriu idees de regal perquè el teu amic invisible t'encerti. Les veurà qui et tingui assignat.</p><textarea id="mw" rows="4" placeholder="Llibres, un joc de taula, te...">${esc(mwd!==null?mwd:(m.w||""))}</textarea><button class="chip pri" id="savew" style="width:100%">Desa</button></div>`;
-  h+=`<h2>🦌 Qui participa</h2><div class="card">${Object.entries(byNuc()).sort().map(([f,a])=>`<div class="g">🎄 ${esc(f)}</div>${a.map(p=>`<div class="p"><span>${esc(p.n)}</span></div>`).join("")}`).join("")}</div>`}
+  if(S.draw){const t=res?S.people[res]:null;
+   h+=`<div class="card c"><p class="sub" style="margin:0">El sorteig ja s'ha fet</p>${shown?`<div class="big">${t?esc(t.n):"?"}</div><p class="sub" style="margin:0">és el teu amic invisible 🤫</p>${t&&t.w?`<h2 style="text-align:left">Què li agradaria rebre</h2><div class="wl">${esc(t.w).replace(/\n/g,"<br>")}</div>`:`<p class="sub">Encara no ha afegit cap idea de regal.</p>`}<button class="chip" id="hide" style="margin-top:12px">Amaga</button>`:`<button class="chip pri" id="show" style="margin:14px 0 4px">Veure a qui li faig el regal</button>`}</div>`}
+  else h+=`<div class="card"><p style="margin:0 0 6px">Estàs apuntat/da. Quan l'administrador faci el sorteig, aquí et sortirà a qui li has de fer el regal.</p><p class="sub" style="margin:0">Apuntats fins ara: <b>${ppl().length}</b></p></div>`;
+  h+=`<h2>La meva llista de desitjos</h2><div class="card"><p class="sub" style="margin-top:0">Escriu idees de regal perquè el teu amic invisible t'encerti. Les veurà qui et tingui assignat.</p><textarea id="mw" rows="4" placeholder="Llibres, un joc de taula, te...">${esc(mwd!==null?mwd:(m.w||""))}</textarea><button class="chip pri" id="savew" style="width:100%">Desa</button></div>`;
+  h+=`<h2>Qui participa</h2><div class="card">${Object.entries(byNuc()).sort().map(([f,a])=>`<div class="g">${esc(f)}</div>${a.map(p=>`<div class="p"><span>${esc(p.n)}</span></div>`).join("")}`).join("")}</div>`}
  $("app").innerHTML=h;
  let a="";
  if(!admin)a=`<button class="chip" id="adm-go">🔑 Entrar com a administrador</button>`;
  else{const bn=byNuc(),n=ppl().length;
-  const form=ae?`<div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--line)"><div class="g" style="margin-top:0;margin-bottom:8px">${ae==="__new"?"Nou participant":"Editar participant"}</div><label>Nom</label><input id="anm" placeholder="Nom" value="${esc(an)}"><label style="display:block;margin-top:8px">Nucli familiar</label><div class="chips" style="margin:6px 0">${nuc().map(f=>`<button class="chip${asel===f?" on":""}" data-af="${esc(f)}">${esc(f)}</button>`).join("")}<button class="chip${asel==="__new"?" on":""}" data-af="__new">＋ Nou nucli</button></div>${asel==="__new"?`<input id="anf" placeholder="Nom del nou nucli" value="${esc(af)}">`:""}<label style="display:block;margin-top:8px">Llista de desitjos (opcional)</label><textarea id="adw" rows="3" placeholder="Llibres, un joc de taula, te...">${esc(aw)}</textarea><div style="display:flex;gap:8px;margin-top:8px"><button class="chip pri" id="adm-save">Desa</button><button class="chip" id="adm-cancel">Cancel·la</button></div></div>`:"";
-  a=`<div class="card"><p class="sub" style="margin-top:0">${n} participants en ${Object.keys(bn).length} nuclis.</p>${Object.entries(bn).sort().map(([f,x])=>`<div class="g">🎄 ${esc(f)}</div>${x.map(p=>`<div class="p"><span>${esc(p.n)}</span><span><button class="x ed" data-edit="${p.id}" title="Editar">✎</button><button class="x" data-del="${p.id}" title="Esborrar">✕</button></span></div>`).join("")}`).join("")}
-  ${form}
-  <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">${!ae?`<button class="chip" id="adm-add">＋ Afegir participant</button>`:""}${S.draw?`<button class="chip" id="reset">↺ Reiniciar sorteig</button>`:`<button class="chip pri" id="dodraw">🎲 Fer el sorteig</button>`}</div>${S.draw?`<p class="sub">❄️ Sorteig fet. Cadascú veu només el seu amic invisible.</p>`:""}</div>`}
+  a=`<div class="card"><p class="sub" style="margin-top:0">${n} participants en ${Object.keys(bn).length} nuclis.</p>${Object.entries(bn).sort().map(([f,x])=>`<div class="g">${esc(f)}</div>${x.map(p=>`<div class="p"><span>${esc(p.n)}</span><button class="x" data-del="${p.id}">✕</button></div>`).join("")}`).join("")}
+  <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">${S.draw?`<button class="chip" id="reset">↺ Reiniciar sorteig</button>`:`<button class="chip pri" id="dodraw">🎲 Fer el sorteig</button>`}</div>${S.draw?`<p class="sub">Sorteig fet. Cadascú veu només el seu amic invisible.</p>`:""}</div>`}
  $("adm").innerHTML=a}
-document.addEventListener("input",e=>{
- if(e.target.id==="nm")dn=e.target.value;if(e.target.id==="nf")df=e.target.value;if(e.target.id==="dw")dw=e.target.value;if(e.target.id==="mw")mwd=e.target.value;
- if(e.target.id==="anm")an=e.target.value;if(e.target.id==="anf")af=e.target.value;if(e.target.id==="adw")aw=e.target.value;
-});
+document.addEventListener("input",e=>{if(e.target.id==="nm")dn=e.target.value;if(e.target.id==="nf")df=e.target.value;if(e.target.id==="dw")dw=e.target.value;if(e.target.id==="pn")dp=e.target.value;if(e.target.id==="mw")mwd=e.target.value});
 document.addEventListener("click",async e=>{const g=s=>e.target.closest(s);let el;
  if(el=g("[data-f]")){sel=el.dataset.f;render();return}
- if(el=g("[data-me]")){me=el.dataset.me;localStorage.setItem("sa-me",me);render();return}
+ if(el=g("[data-me]")){const p=S.people[el.dataset.me];if(!p.sk)return alert("Aquesta persona no té PIN: que l'administrador l'esborri i es torni a apuntar.");const pin=prompt("PIN de "+p.n+":");if(!pin)return;if(!await opn(p,pin))return alert("PIN incorrecte");me=el.dataset.me;try{localStorage.setItem("sa-me",me)}catch(x){}render();return}
  if(g("#go")){const n=dn.trim();let f=sel==="__new"?df.trim():sel;if(!n||!f)return alert("Posa el teu nom i tria un nucli.");
   f=nuc().find(x=>x.toLowerCase()===f.toLowerCase())||f;
+  if(dp.length<4)return alert("Posa un PIN d'almenys 4 caràcters.");
+  g("#go").disabled=true;g("#go").textContent="Creant la clau…";const kk=await mk(dp);
   const id=(n.toLowerCase().normalize("NFD").replace(/[^a-z0-9]/g,"")||"p")+Date.now().toString(36);
-  S.people[id]={n,f,w:dw.trim()};me=id;try{localStorage.setItem("sa-me",id)}catch(x){}render();await call("people/"+id,"PUT",{n,f,w:dw.trim()});dw="";return}
+  S.people[id]={n,f,w:dw.trim(),pk:kk.pk,sk:kk.sk};me=id;try{localStorage.setItem("sa-me",id)}catch(x){}render();await call("people/"+id,"PUT",S.people[id]);dw="";dp="";return}
  if(g("#savew")){const w=$("mw").value.trim();S.people[me].w=w;mwd=null;render();await call("people/"+me+"/w","PUT",w);return}
- if(g("#out")){e.preventDefault();me=null;shown=false;try{localStorage.removeItem("sa-me")}catch(x){}render();return}
- if(g("#show")){shown=true;render();return}if(g("#hide")){shown=false;render();return}
+ if(g("#out")){e.preventDefault();me=null;shown=false;res=null;try{localStorage.removeItem("sa-me")}catch(x){}render();return}
+ if(g("#show")){const p=S.people[me],pin=prompt("El teu PIN:");if(!pin)return;const k=await opn(p,pin);if(!k)return alert("PIN incorrecte");
+  try{res=new TextDecoder().decode(await crypto.subtle.decrypt({name:"RSA-OAEP"},k,ub(S.draw[me])));shown=true}catch(x){alert("No s'ha pogut desxifrar el resultat. Potser el sorteig s'ha tornat a fer.")}render();return}
+ if(g("#hide")){shown=false;res=null;render();return}
  if(g("#adm-go")){if(!S.pin){const p=prompt("Crea un PIN d'administrador (el necessitaràs per fer el sorteig):");if(!p)return;S.pin=await sha(p);admin=true;render();await call("pin","PUT",S.pin)}
   else{const p=prompt("PIN d'administrador:");if(p&&await sha(p)===S.pin){admin=true;render()}else if(p)alert("PIN incorrecte")}return}
  if(!admin)return;
- if(el=g("[data-af]")){asel=el.dataset.af;render();return}
- if(g("#adm-add")){ae="__new";an="";asel=null;af="";aw="";render();return}
- if(el=g("[data-edit]")){const id=el.dataset.edit,p=S.people[id];if(!p)return;ae=id;an=p.n;asel=p.f;af="";aw=p.w||"";render();return}
- if(g("#adm-cancel")){ae=null;render();return}
- if(g("#adm-save")){const n=an.trim();let f=asel==="__new"?af.trim():asel;if(!n||!f)return alert("Posa el nom i tria un nucli.");
-  f=nuc().find(x=>x.toLowerCase()===f.toLowerCase())||f;
-  const w=aw.trim(),isNew=ae==="__new";
-  const resetDraw=S.draw&&(isNew||S.people[ae]?.f!==f);
-  if(resetDraw&&!confirm((isNew?"Afegir un participant":"Canviar el nucli familiar")+" anul·larà el sorteig actual. Continuar?"))return;
-  const id=isNew?(n.toLowerCase().normalize("NFD").replace(/[^a-z0-9]/g,"")||"p")+Date.now().toString(36):ae;
-  S.people[id]={n,f,w};if(me===id)mwd=null;ae=null;
-  if(resetDraw){S.draw=null;shown=false;await call("draw","DELETE")}
-  render();await call("people/"+id,"PUT",{n,f,w});return}
  if(el=g("[data-del]")){const id=el.dataset.del;if(!confirm("Esborrar "+S.people[id].n+"?"+(S.draw?" Això també anul·la el sorteig.":"")))return;
-  delete S.people[id];if(ae===id)ae=null;if(S.draw){S.draw=null;await call("draw","DELETE")}render();await call("people/"+id,"DELETE");return}
+  delete S.people[id];if(S.draw){S.draw=null;await call("draw","DELETE")}render();await call("people/"+id,"DELETE");return}
  if(g("#dodraw")){const d=makeDraw();if(!d)return alert("No es pot fer el sorteig: calen almenys 2 persones i cap nucli pot tenir més de la meitat dels participants.");
-  if(!confirm("Fer el sorteig ara? Ja no es podran apuntar més persones."))return;S.draw=d;render();await call("draw","PUT",d);return}
+  const miss=ppl().filter(p=>!p.pk);if(miss.length)return alert("Aquests participants no tenen PIN (cal esborrar-los i que es tornin a apuntar): "+miss.map(p=>p.n).join(", "));
+  if(!confirm("Fer el sorteig ara? Ja no es podran apuntar més persones. El resultat es desa xifrat: ni tu el podràs veure."))return;
+  g("#dodraw").disabled=true;const ed={};for(const[k,v]of Object.entries(d))ed[k]=await enc(S.people[k].pk,v);S.draw=ed;render();await call("draw","PUT",ed);return}
  if(g("#reset")){if(!confirm("Reiniciar el sorteig? Se n'esborrarà el resultat."))return;S.draw=null;shown=false;render();await call("draw","DELETE")}});
 let last="";
 function pull(){fetch(DB+".json").then(r=>r.json()).then(o=>{o=o||{};const n={people:o.people||{},draw:o.draw||null,pin:o.pin||null},k=JSON.stringify(n);
- if(k===last)return;last=k;S=n;if(!(document.activeElement&&/INPUT|TEXTAREA/.test(document.activeElement.tagName)))render()}).catch(()=>{})}
+ if(k===last)return;last=k;if(JSON.stringify(n.draw)!==JSON.stringify(S.draw)){shown=false;res=null}S=n;if(!(document.activeElement&&/INPUT|TEXTAREA/.test(document.activeElement.tagName)))render()}).catch(()=>{})}
 render();pull();setInterval(pull,4000);
 </script></body></html>
