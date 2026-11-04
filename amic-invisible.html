@@ -29,11 +29,11 @@ textarea{width:100%;font:16px 'DM Sans',sans-serif;background:var(--bg);color:va
 const DB="https://canut-compartit-default-rtdb.europe-west1.firebasedatabase.app/sa";
 const $=id=>document.getElementById(id);
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-let S={people:{},draw:null,pin:null},me=null,admin=false,sel=null,dn="",df="",shown=false,dw="",mwd=null,dp="",res=null;
+let S={people:{},draw:null,pin:null,adm:null},me=null,admin=false,sel=null,dn="",df="",shown=false,dw="",mwd=null,dp="",res=null,apin="",showAdm=false,admMap=null;
 try{me=localStorage.getItem("sa-me")}catch(e){}
 const fail=()=>{$("msg").innerHTML=`<p class="note">⚠️ No s'ha pogut desar. Revisa la connexió.</p>`};
 const call=(p,m,v)=>fetch(DB+"/"+p+".json",{method:m,body:v===undefined?undefined:JSON.stringify(v)}).then(r=>{if(!r.ok)throw 0;$("msg").innerHTML=""}).catch(fail);
-const ppl=()=>Object.entries(S.people).map(([id,v])=>({id,n:v.n,f:v.f}));
+const ppl=()=>Object.entries(S.people).map(([id,v])=>({id,n:v.n,f:v.f,pk:v.pk}));
 const nuc=()=>[...new Set(ppl().map(p=>p.f))].sort((a,b)=>a.localeCompare(b));
 const sha=async s=>[...new Uint8Array(await crypto.subtle.digest("SHA-256",new TextEncoder().encode("sa:"+s)))].map(x=>x.toString(16).padStart(2,"0")).join("");
 //CRYPTO
@@ -47,6 +47,8 @@ async function mk(pin){const kp=await crypto.subtle.generateKey({name:"RSA-OAEP"
  return{pk,sk:b64(salt)+"."+b64(iv)+"."+b64(ct)}}
 async function opn(p,pin){try{const[s,i,c]=p.sk.split(".").map(ub);const pr=await crypto.subtle.decrypt({name:"AES-GCM",iv:i},await kd(pin,s),c);return await crypto.subtle.importKey("pkcs8",pr,{name:"RSA-OAEP",hash:"SHA-256"},false,["decrypt"])}catch(e){return null}}
 const enc=async(pk,t)=>b64(await crypto.subtle.encrypt({name:"RSA-OAEP"},await crypto.subtle.importKey("jwk",JSON.parse(pk),{name:"RSA-OAEP",hash:"SHA-256"},false,["encrypt"]),new TextEncoder().encode(t)));
+async function sealA(pin,o){const s=crypto.getRandomValues(new Uint8Array(16)),i=crypto.getRandomValues(new Uint8Array(12));return b64(s)+"."+b64(i)+"."+b64(await crypto.subtle.encrypt({name:"AES-GCM",iv:i},await kd(pin,s),new TextEncoder().encode(JSON.stringify(o))))}
+async function openA(pin,t){try{const[s,i,c]=t.split(".").map(ub);return JSON.parse(new TextDecoder().decode(await crypto.subtle.decrypt({name:"AES-GCM",iv:i},await kd(pin,s),c)))}catch(e){return null}}
 //ENDCRYPTO
 function makeDraw(){const P=ppl(),n=P.length;if(n<2)return null;const g={};P.forEach(p=>g[p.f]=(g[p.f]||0)+1);const gm=Math.max(...Object.values(g));if(gm*2>n)return null;
  const R=()=>{const b=new Uint32Array(1);crypto.getRandomValues(b);return b[0]/4294967296};
@@ -60,7 +62,7 @@ function render(){
  const m=S.people[me];if(me&&!m)me=null;
  let h="";
  if(!me){
-  h+=S.draw?`<p class="note">El sorteig ja s'ha fet: només pots entrar si ja t'havies apuntat.</p>`:`<h2>Apunta't</h2><div class="card"><label>El teu nom</label><input id="nm" placeholder="Nom" value="${esc(dn)}"><label style="display:block;margin-top:8px">El teu nucli familiar</label><div class="chips" style="margin:6px 0">${nuc().map(f=>`<button class="chip${sel===f?" on":""}" data-f="${esc(f)}">${esc(f)}</button>`).join("")}<button class="chip${sel==="__new"?" on":""}" data-f="__new">＋ Nou nucli</button></div>${sel==="__new"?`<input id="nf" placeholder="Nom del nou nucli (p. ex. Família Pons)" value="${esc(df)}">`:""}<label style="display:block;margin-top:8px">Crea un PIN (mínim 4 caràcters)</label><input id="pn" type="password" autocomplete="new-password" placeholder="PIN" value="${esc(dp)}"><p class="sub" style="margin:0">El necessitaràs per tornar a entrar i veure el teu amic invisible. Si l'oblides, l'administrador t'haurà d'esborrar i repetir el sorteig.</p><label style="display:block;margin-top:8px">Què t'agradaria rebre? (opcional)</label><textarea id="dw" rows="3" placeholder="Llibres, un joc de taula, te...">${esc(dw)}</textarea><button class="chip pri" id="go" style="width:100%;margin-top:8px">Apunta'm</button></div>`;
+  h+=S.draw?`<p class="note">El sorteig ja s'ha fet: només pots entrar si ja t'havies apuntat.</p>`:`<h2>Apunta't</h2><div class="card"><label>El teu nom</label><input id="nm" placeholder="Nom" value="${esc(dn)}"><label style="display:block;margin-top:8px">El teu nucli familiar</label><div class="chips" style="margin:6px 0">${nuc().map(f=>`<button class="chip${sel===f?" on":""}" data-f="${esc(f)}">${esc(f)}</button>`).join("")}<button class="chip${sel==="__new"?" on":""}" data-f="__new">＋ Nou nucli</button></div>${sel==="__new"?`<input id="nf" placeholder="Nom del nou nucli (p. ex. Família Pons)" value="${esc(df)}">`:""}<label style="display:block;margin-top:8px">Crea un PIN (opcional, mínim 4 caràcters)</label><input id="pn" type="password" autocomplete="new-password" placeholder="PIN" value="${esc(dp)}"><p class="sub" style="margin:0">Amb PIN, només tu pots entrar com a tu i veure el teu amic invisible (el resultat es desa xifrat). Sense PIN, qualsevol que triï el teu nom ho podria veure. Si l'oblides, l'administrador t'haurà d'esborrar i repetir el sorteig.</p><label style="display:block;margin-top:8px">Què t'agradaria rebre? (opcional)</label><textarea id="dw" rows="3" placeholder="Llibres, un joc de taula, te...">${esc(dw)}</textarea><button class="chip pri" id="go" style="width:100%;margin-top:8px">Apunta'm</button></div>`;
   const P=ppl();if(P.length)h+=`<h2>Ja m'havia apuntat</h2><div class="chips">${P.map(p=>`<button class="chip" data-me="${p.id}">${esc(p.n)}</button>`).join("")}</div>`;
  }else{
   h+=`<p class="sub">Hola, <b>${esc(m.n)}</b> · ${esc(m.f)} · <a href="#" id="out" style="color:var(--mute)">no sóc jo</a></p>`;
@@ -74,35 +76,36 @@ function render(){
  if(!admin)a=`<button class="chip" id="adm-go">🔑 Entrar com a administrador</button>`;
  else{const bn=byNuc(),n=ppl().length;
   a=`<div class="card"><p class="sub" style="margin-top:0">${n} participants en ${Object.keys(bn).length} nuclis.</p>${Object.entries(bn).sort().map(([f,x])=>`<div class="g">${esc(f)}</div>${x.map(p=>`<div class="p"><span>${esc(p.n)}</span><button class="x" data-del="${p.id}">✕</button></div>`).join("")}`).join("")}
-  <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">${S.draw?`<button class="chip" id="reset">↺ Reiniciar sorteig</button>`:`<button class="chip pri" id="dodraw">🎲 Fer el sorteig</button>`}</div>${S.draw?`<p class="sub">Sorteig fet. Cadascú veu només el seu amic invisible.</p>`:""}</div>`}
+  <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">${S.draw?`<button class="chip" id="reset">↺ Reiniciar sorteig</button>`:`<button class="chip pri" id="dodraw">🎲 Fer el sorteig</button>`}</div>${S.draw?`<p class="sub">Sorteig fet. Cadascú veu només el seu amic invisible.</p>${S.adm?(showAdm&&admMap?`<div class="g">Resultat del sorteig</div>${Object.entries(admMap).map(([a,b])=>`<div class="p"><span>${esc(S.people[a]?S.people[a].n:"?")} → ${esc(S.people[b]?S.people[b].n:"?")}</span></div>`).join("")}<button class="chip" id="vis" style="margin-top:10px">Amaga el resultat</button>`:`<button class="chip" id="vis">👁 Mostra el resultat del sorteig</button>`):`<p class="sub">El resultat complet no està disponible (sorteig fet amb una versió anterior).</p>`}`:""}</div>`}
  $("adm").innerHTML=a}
 document.addEventListener("input",e=>{if(e.target.id==="nm")dn=e.target.value;if(e.target.id==="nf")df=e.target.value;if(e.target.id==="dw")dw=e.target.value;if(e.target.id==="pn")dp=e.target.value;if(e.target.id==="mw")mwd=e.target.value});
 document.addEventListener("click",async e=>{const g=s=>e.target.closest(s);let el;
  if(el=g("[data-f]")){sel=el.dataset.f;render();return}
- if(el=g("[data-me]")){const p=S.people[el.dataset.me];if(!p.sk)return alert("Aquesta persona no té PIN: que l'administrador l'esborri i es torni a apuntar.");const pin=prompt("PIN de "+p.n+":");if(!pin)return;if(!await opn(p,pin))return alert("PIN incorrecte");me=el.dataset.me;try{localStorage.setItem("sa-me",me)}catch(x){}render();return}
+ if(el=g("[data-me]")){const p=S.people[el.dataset.me];if(p.sk){const pin=prompt("PIN de "+p.n+":");if(!pin)return;if(!await opn(p,pin))return alert("PIN incorrecte")}me=el.dataset.me;try{localStorage.setItem("sa-me",me)}catch(x){}render();return}
  if(g("#go")){const n=dn.trim();let f=sel==="__new"?df.trim():sel;if(!n||!f)return alert("Posa el teu nom i tria un nucli.");
   f=nuc().find(x=>x.toLowerCase()===f.toLowerCase())||f;
-  if(dp.length<4)return alert("Posa un PIN d'almenys 4 caràcters.");
-  g("#go").disabled=true;g("#go").textContent="Creant la clau…";const kk=await mk(dp);
+  if(dp&&dp.length<4)return alert("El PIN ha de tenir almenys 4 caràcters (o deixa'l buit).");
+  g("#go").disabled=true;let kk={};if(dp){g("#go").textContent="Creant la clau…";kk=await mk(dp)}
   const id=(n.toLowerCase().normalize("NFD").replace(/[^a-z0-9]/g,"")||"p")+Date.now().toString(36);
   S.people[id]={n,f,w:dw.trim(),pk:kk.pk,sk:kk.sk};me=id;try{localStorage.setItem("sa-me",id)}catch(x){}render();await call("people/"+id,"PUT",S.people[id]);dw="";dp="";return}
  if(g("#savew")){const w=$("mw").value.trim();S.people[me].w=w;mwd=null;render();await call("people/"+me+"/w","PUT",w);return}
  if(g("#out")){e.preventDefault();me=null;shown=false;res=null;try{localStorage.removeItem("sa-me")}catch(x){}render();return}
- if(g("#show")){const p=S.people[me],pin=prompt("El teu PIN:");if(!pin)return;const k=await opn(p,pin);if(!k)return alert("PIN incorrecte");
-  try{res=new TextDecoder().decode(await crypto.subtle.decrypt({name:"RSA-OAEP"},k,ub(S.draw[me])));shown=true}catch(x){alert("No s'ha pogut desxifrar el resultat. Potser el sorteig s'ha tornat a fer.")}render();return}
+ if(g("#show")){const p=S.people[me],e=S.draw[me]||"";
+  try{if(e.startsWith("p:"))res=e.slice(2);else{const pin=prompt("El teu PIN:");if(!pin)return;const k=await opn(p,pin);if(!k)return alert("PIN incorrecte");res=new TextDecoder().decode(await crypto.subtle.decrypt({name:"RSA-OAEP"},k,ub(e.slice(2))))}shown=true}catch(x){alert("No s'ha pogut desxifrar el resultat. Potser el sorteig s'ha tornat a fer.")}render();return}
  if(g("#hide")){shown=false;res=null;render();return}
- if(g("#adm-go")){if(!S.pin){const p=prompt("Crea un PIN d'administrador (el necessitaràs per fer el sorteig):");if(!p)return;S.pin=await sha(p);admin=true;render();await call("pin","PUT",S.pin)}
-  else{const p=prompt("PIN d'administrador:");if(p&&await sha(p)===S.pin){admin=true;render()}else if(p)alert("PIN incorrecte")}return}
+ if(g("#adm-go")){if(!S.pin){const p=prompt("Crea un PIN d'administrador (el necessitaràs per fer el sorteig):");if(!p)return;S.pin=await sha(p);admin=true;apin=p;render();await call("pin","PUT",S.pin)}
+  else{const p=prompt("PIN d'administrador:");if(p&&await sha(p)===S.pin){admin=true;apin=p;render()}else if(p)alert("PIN incorrecte")}return}
  if(!admin)return;
  if(el=g("[data-del]")){const id=el.dataset.del;if(!confirm("Esborrar "+S.people[id].n+"?"+(S.draw?" Això també anul·la el sorteig.":"")))return;
-  delete S.people[id];if(S.draw){S.draw=null;await call("draw","DELETE")}render();await call("people/"+id,"DELETE");return}
+  delete S.people[id];if(S.draw){S.draw=null;S.adm=null;showAdm=false;admMap=null;await call("draw","DELETE");await call("adm","DELETE")}render();await call("people/"+id,"DELETE");return}
  if(g("#dodraw")){const d=makeDraw();if(!d)return alert("No es pot fer el sorteig: calen almenys 2 persones i cap nucli pot tenir més de la meitat dels participants.");
-  const miss=ppl().filter(p=>!p.pk);if(miss.length)return alert("Aquests participants no tenen PIN (cal esborrar-los i que es tornin a apuntar): "+miss.map(p=>p.n).join(", "));
-  if(!confirm("Fer el sorteig ara? Ja no es podran apuntar més persones. El resultat es desa xifrat: ni tu el podràs veure."))return;
-  g("#dodraw").disabled=true;const ed={};for(const[k,v]of Object.entries(d))ed[k]=await enc(S.people[k].pk,v);S.draw=ed;render();await call("draw","PUT",ed);return}
- if(g("#reset")){if(!confirm("Reiniciar el sorteig? Se n'esborrarà el resultat."))return;S.draw=null;shown=false;render();await call("draw","DELETE")}});
+  if(!confirm("Fer el sorteig ara? Ja no es podran apuntar més persones. Cada persona només veurà el seu destinatari; tu podràs veure el resultat complet si ho demanes."))return;
+  g("#dodraw").disabled=true;const ed={};for(const[k,v]of Object.entries(d))ed[k]=S.people[k].pk?"e:"+await enc(S.people[k].pk,v):"p:"+v;
+  const ad=await sealA(apin,d);S.draw=ed;S.adm=ad;render();await call("draw","PUT",ed);await call("adm","PUT",ad);return}
+ if(g("#vis")){if(showAdm){showAdm=false;admMap=null}else{admMap=await openA(apin,S.adm);if(!admMap)alert("No s'ha pogut obrir el resultat.");showAdm=!!admMap}render();return}
+ if(g("#reset")){if(!confirm("Reiniciar el sorteig? Se n'esborrarà el resultat."))return;S.draw=null;S.adm=null;showAdm=false;admMap=null;shown=false;render();await call("draw","DELETE");await call("adm","DELETE")}});
 let last="";
-function pull(){fetch(DB+".json").then(r=>r.json()).then(o=>{o=o||{};const n={people:o.people||{},draw:o.draw||null,pin:o.pin||null},k=JSON.stringify(n);
+function pull(){fetch(DB+".json").then(r=>r.json()).then(o=>{o=o||{};const n={people:o.people||{},draw:o.draw||null,pin:o.pin||null,adm:o.adm||null},k=JSON.stringify(n);
  if(k===last)return;last=k;if(JSON.stringify(n.draw)!==JSON.stringify(S.draw)){shown=false;res=null}S=n;if(!(document.activeElement&&/INPUT|TEXTAREA/.test(document.activeElement.tagName)))render()}).catch(()=>{})}
 render();pull();setInterval(pull,4000);
 </script></body></html>
