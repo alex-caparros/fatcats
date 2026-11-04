@@ -2,7 +2,7 @@
 <html lang="ca"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Amic invisible</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@400;500;700&family=Mountains+of+Christmas:wght@700&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#f6efe4;--paper:#fffdf8;--ink:#2a2420;--mute:#8a8070;--line:#e0d4c0;--acc:#b8312f;--grn:#2f6b4a;--chip:#f0e6d2;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 @media (prefers-color-scheme:dark){:root{--bg:#1c1816;--paper:#27221f;--ink:#f3ebdc;--mute:#9c9283;--line:#3b342e;--acc:#ee7a6e;--grn:#7cc79c;--chip:#332d28}}
@@ -21,8 +21,28 @@ textarea{width:100%;font:16px 'DM Sans',sans-serif;background:var(--bg);color:va
 .g{margin:10px 0 2px;font:700 13px 'Space Mono',monospace;color:var(--grn)}.p{display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px dashed var(--line)}
 .x{border:0;background:none;color:var(--acc);font-size:18px;cursor:pointer}
 .big{font:700 30px 'Space Mono',monospace;text-align:center;margin:14px 0;color:var(--acc)}.c{text-align:center}
+/* Nadal */
+:root{--bg:#fbf4e8;--paper:#fffdf7;--ink:#2b2320;--mute:#85766a;--line:#ecdcc0;--acc:#b3202a;--grn:#1f6b45;--chip:#f6e9d0;--gold:#c99a2e}
+@media (prefers-color-scheme:dark){:root{--bg:#0f241a;--paper:#16352a;--ink:#f8f0de;--mute:#a9b9a8;--line:#2c5240;--acc:#ff6f61;--grn:#8fd6a8;--chip:#1f4435;--gold:#f2d37c}}
+body{background:radial-gradient(circle at 15% -10%,color-mix(in srgb,var(--acc) 10%,transparent),transparent 40%),radial-gradient(circle at 95% 0,color-mix(in srgb,var(--grn) 12%,transparent),transparent 45%),var(--bg);min-height:100vh}
+main{position:relative;z-index:1}
+#snow{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+#snow i{position:absolute;top:-30px;font-style:normal;color:#fff;text-shadow:0 0 4px rgba(110,140,165,.7);animation:fall linear infinite}
+@keyframes fall{to{transform:translateY(110vh) translateX(30px) rotate(180deg)}}
+.garland{height:22px;margin:-18px -14px 6px;background:radial-gradient(circle at 12px 14px,var(--acc) 0 4px,transparent 5px) 0 0/48px 22px,radial-gradient(circle at 24px 14px,var(--grn) 0 4px,transparent 5px) 0 0/48px 22px,radial-gradient(circle at 36px 14px,var(--gold) 0 4px,transparent 5px) 0 0/48px 22px;border-bottom:2px solid var(--grn);animation:blink 2.4s ease-in-out infinite alternate}
+@keyframes blink{from{opacity:.6}to{opacity:1}}
+h1{font:700 34px 'Mountains of Christmas','Space Mono',cursive;color:var(--acc);text-align:center;margin:10px 0 4px;text-shadow:0 1px 0 var(--gold)}
+h2{color:var(--grn)}h2::before{content:"❄ ";color:var(--gold)}
+.card{border:1.5px solid var(--gold);box-shadow:0 2px 10px color-mix(in srgb,var(--grn) 12%,transparent)}
+.chip.pri{background:linear-gradient(135deg,var(--acc),color-mix(in srgb,var(--acc) 70%,#000));border-color:var(--gold);color:#fff}
+.chip.on{background:var(--grn);border-color:var(--grn);color:#fff}
+.card.c::before{content:"🎁";display:block;font-size:46px;animation:bob 2s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-6px) rotate(-4deg)}}
+.big{font-family:'Mountains of Christmas','Space Mono',cursive;font-size:44px}
+.g{color:var(--acc)}.wl{border-left:3px solid var(--gold)}
+@media (prefers-reduced-motion:reduce){#snow{display:none}.garland,.card.c::before{animation:none}}
 </style></head><body><main>
-<h1>🎁 Amic invisible</h1><div id="msg"></div><div id="app"></div>
+<div id="snow"></div><div class="garland"></div><h1>🎄 Amic invisible 🎁</h1><div id="msg"></div><div id="app"></div>
 <h2>Administrador</h2><div id="adm"></div>
 </main>
 <script>
@@ -108,4 +128,5 @@ let last="";
 function pull(){fetch(DB+".json").then(r=>r.json()).then(o=>{o=o||{};const n={people:o.people||{},draw:o.draw||null,pin:o.pin||null,adm:o.adm||null},k=JSON.stringify(n);
  if(k===last)return;last=k;if(JSON.stringify(n.draw)!==JSON.stringify(S.draw)){shown=false;res=null}S=n;if(!(document.activeElement&&/INPUT|TEXTAREA/.test(document.activeElement.tagName)))render()}).catch(()=>{})}
 render();pull();setInterval(pull,4000);
+(()=>{const s=$("snow");if(matchMedia("(prefers-reduced-motion: reduce)").matches)return;for(let i=0;i<28;i++){const f=document.createElement("i");f.textContent="❄";f.style.cssText=`left:${Math.random()*100}%;font-size:${8+Math.random()*14}px;animation-duration:${8+Math.random()*10}s;animation-delay:${-Math.random()*14}s;opacity:${.3+Math.random()*.5}`;s.appendChild(f)}})();
 </script></body></html>
