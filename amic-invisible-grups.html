@@ -52,7 +52,15 @@ import {initializeApp} from "https://www.gstatic.com/firebasejs/10.14.1/firebase
 import {getAuth,GoogleAuthProvider,signInWithPopup,onAuthStateChanged,signOut} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 import {getDatabase,ref,onValue,get,update,push} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
 // ⬇️ Enganxa aquí la configuració de la teva app web de Firebase
-const firebaseConfig={apiKey:"",authDomain:"",databaseURL:"https://canut-compartit-default-rtdb.europe-west1.firebasedatabase.app",projectId:"",appId:""};
+const firebaseConfig = {
+  apiKey: "AIzaSyAU7ACsDdfzqUyNIzrgFlp2gfnvDtSWdwg",
+  authDomain: "canut-compartit.firebaseapp.com",
+  databaseURL: "https://canut-compartit-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "canut-compartit",
+  storageBucket: "canut-compartit.firebasestorage.app",
+  messagingSenderId: "182718025796",
+  appId: "1:182718025796:web:c444d37d48e47a7f32ac11"
+};
 const $=id=>document.getElementById(id);
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const slug=s=>s.toLowerCase().normalize("NFD").replace(/[^a-z0-9]/g,"")||"n";
