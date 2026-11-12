@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ca"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Amic invisible</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@400;500;700&family=Mountains+of+Christmas:wght@700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f6efe4;--paper:#fffdf8;--ink:#2a2420;--mute:#8a8070;--line:#e0d4c0;--acc:#b8312f;--grn:#2f6b4a;--chip:#f0e6d2;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root{--bg:#1c1816;--paper:#27221f;--ink:#f3ebdc;--mute:#9c9283;--line:#3b342e;--acc:#ee7a6e;--grn:#7cc79c;--chip:#332d28}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.4 'DM Sans',system-ui,sans-serif}
+main{max-width:520px;margin:0 auto;padding:18px 14px 60px}
+h1{font:700 24px 'Space Mono',monospace;margin:6px 0 4px}.sub{color:var(--mute);font-size:14px;margin:4px 0 14px}
+h2{font:700 12px 'Space Mono',monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--mute);margin:22px 0 8px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1.5px solid var(--line);background:var(--paper);color:var(--ink);border-radius:999px;padding:9px 16px;font:500 15px 'DM Sans',sans-serif;cursor:pointer}
+.chip.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}.chip.pri{background:var(--acc);border-color:var(--acc);color:#fff;font-weight:700}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:14px}
+input{width:100%;font:16px 'DM Sans',sans-serif;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:11px 12px;margin:6px 0}
+textarea{width:100%;font:16px 'DM Sans',sans-serif;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:11px 12px;margin:6px 0;resize:vertical}
+.wl{background:var(--chip);border-radius:10px;padding:12px;text-align:left;font-size:15px;margin-top:4px}
+.note{background:var(--chip);border-radius:8px;padding:10px 12px;font-size:13px;margin:0 0 12px}
+.g{margin:10px 0 2px;font:700 13px 'Space Mono',monospace;color:var(--grn)}.p{display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px dashed var(--line)}
+.x{border:0;background:none;color:var(--acc);font-size:18px;cursor:pointer}
+.big{font:700 30px 'Space Mono',monospace;text-align:center;margin:14px 0;color:var(--acc)}.c{text-align:center}
+/* Nadal */
+:root{--bg:#fbf4e8;--paper:#fffdf7;--ink:#2b2320;--mute:#85766a;--line:#ecdcc0;--acc:#b3202a;--grn:#1f6b45;--chip:#f6e9d0;--gold:#c99a2e}
+@media (prefers-color-scheme:dark){:root{--bg:#0f241a;--paper:#16352a;--ink:#f8f0de;--mute:#a9b9a8;--line:#2c5240;--acc:#ff6f61;--grn:#8fd6a8;--chip:#1f4435;--gold:#f2d37c}}
+body{background:radial-gradient(circle at 15% -10%,color-mix(in srgb,var(--acc) 10%,transparent),transparent 40%),radial-gradient(circle at 95% 0,color-mix(in srgb,var(--grn) 12%,transparent),transparent 45%),var(--bg);min-height:100vh}
+main{position:relative;z-index:1}
+#snow{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+#snow i{position:absolute;top:-30px;font-style:normal;color:#fff;text-shadow:0 0 4px rgba(110,140,165,.7);animation:fall linear infinite}
+@keyframes fall{to{transform:translateY(110vh) translateX(30px) rotate(180deg)}}
+.garland{height:22px;margin:-18px -14px 6px;background:radial-gradient(circle at 12px 14px,var(--acc) 0 4px,transparent 5px) 0 0/48px 22px,radial-gradient(circle at 24px 14px,var(--grn) 0 4px,transparent 5px) 0 0/48px 22px,radial-gradient(circle at 36px 14px,var(--gold) 0 4px,transparent 5px) 0 0/48px 22px;border-bottom:2px solid var(--grn);animation:blink 2.4s ease-in-out infinite alternate}
+@keyframes blink{from{opacity:.6}to{opacity:1}}
+h1{font:700 34px 'Mountains of Christmas','Space Mono',cursive;color:var(--acc);text-align:center;margin:10px 0 4px;text-shadow:0 1px 0 var(--gold)}
+h2{color:var(--grn)}h2::before{content:"❄ ";color:var(--gold)}
+.card{border:1.5px solid var(--gold);box-shadow:0 2px 10px color-mix(in srgb,var(--grn) 12%,transparent)}
+.chip.pri{background:linear-gradient(135deg,var(--acc),color-mix(in srgb,var(--acc) 70%,#000));border-color:var(--gold);color:#fff}
+.chip.on{background:var(--grn);border-color:var(--grn);color:#fff}
+.card.c::before{content:"🎁";display:block;font-size:46px;animation:bob 2s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-6px) rotate(-4deg)}}
+.big{font-family:'Mountains of Christmas','Space Mono',cursive;font-size:44px}
+.g{color:var(--acc)}.wl{border-left:3px solid var(--gold)}
+@media (prefers-reduced-motion:reduce){#snow{display:none}.garland,.card.c::before{animation:none}}
+
+.bd{font-size:11px;background:var(--gold);color:#222;border-radius:6px;padding:1px 6px;margin-left:6px;font-weight:700}
+a{color:var(--grn)}.row2{display:flex;gap:8px}.row2 input{flex:1}
+</style></head><body><main>
+<div id="snow"></div><div class="garland"></div><h1>🎄 Amic invisible 🎁</h1><div id="top"></div><div id="app"></div>
+</main>
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+import {getAuth,GoogleAuthProvider,signInWithPopup,onAuthStateChanged,signOut} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+import {getDatabase,ref,onValue,get,update,push} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
+// ⬇️ Enganxa aquí la configuració de la teva app web de Firebase
+const firebaseConfig={apiKey:"",authDomain:"",databaseURL:"https://canut-compartit-default-rtdb.europe-west1.firebasedatabase.app",projectId:"",appId:""};
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const slug=s=>s.toLowerCase().normalize("NFD").replace(/[^a-z0-9]/g,"")||"n";
+const ok=!!firebaseConfig.apiKey;let auth,db;
+if(ok){const app=initializeApp(firebaseConfig);auth=getAuth(app);db=getDatabase(app)}
+let U,gid=new URLSearchParams(location.search).get("g"),G,M,mine=null,myG={},subs=[],shown=false,showAll=false,all=null,sel=null,dn="",df="",dw="",mwd=null,gn="";
+const busy=()=>/INPUT|TEXTAREA/.test((document.activeElement||{}).tagName||"");
+const rr=()=>{if(!busy())render()};
+const fail=e=>alert("No s'ha pogut fer: "+((e&&e.code)||e||"error"));
+function openGroup(id){subs.forEach(f=>f());subs=[];gid=id;G=undefined;M=undefined;mine=null;shown=false;showAll=false;all=null;sel=null;
+ history.replaceState(null,"",id?"?g="+id:location.pathname);if(!id){render();return}
+ subs.push(onValue(ref(db,"groups/"+id),s=>{G=s.val();rr()},()=>{G=null;rr()}));
+ subs.push(onValue(ref(db,"members/"+id),s=>{M=s.val()||{};rr()},()=>{M=null;rr()}));
+ subs.push(onValue(ref(db,"assign/"+id+"/"+U.uid),s=>{mine=s.val();rr()},()=>{}))}
+function makeDraw(){const P=Object.entries(M).map(([id,v])=>({id,f:v.f})),n=P.length;if(n<2)return null;const g={};P.forEach(p=>g[p.f]=(g[p.f]||0)+1);const gm=Math.max(...Object.values(g));if(gm*2>n)return null;
+ const R=()=>{const b=new Uint32Array(1);crypto.getRandomValues(b);return b[0]/4294967296};
+ const sh=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(R()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+ for(let t=0;t<2000;t++){const b=sh(P);if(P.every((p,i)=>p.f!==b[i].f))return Object.fromEntries(P.map((p,i)=>[p.id,b[i].id]))}
+ const grp={};P.forEach(p=>(grp[p.f]=grp[p.f]||[]).push(p));
+ const L=sh(Object.values(grp).map(sh)).flat(),s=gm+Math.floor(R()*(n-2*gm+1));
+ return Object.fromEntries(L.map((p,i)=>[p.id,L[(i+s)%n].id]))}
+const byN=()=>{const o={};Object.entries(M||{}).forEach(([id,v])=>(o[v.f]=o[v.f]||[]).push({id,...v}));return o};
+const people=o=>Object.entries(o).sort().map(([f,a])=>`<div class="g">${esc(f)}</div>${a.map(p=>`<div class="p"><span>${esc(p.n)}</span>${p.x?`<button class="x" data-del="${p.id}">✕</button>`:""}</div>`).join("")}`).join("");
+function listView(){const ids=Object.keys(myG);
+ return `<h2>Els meus grups</h2>${ids.length?`<div class="card">${ids.map(i=>`<div class="p"><span>${esc(myG[i].name)}${myG[i].admin===U.uid?'<span class="bd">admin</span>':""}</span><button class="chip" data-open="${i}">Obrir</button></div>`).join("")}</div>`:`<p class="note">Encara no tens cap grup. Crea'n un o obre l'enllaç que t'hagin enviat.</p>`}
+ <h2>Crea un grup nou</h2><div class="card"><input id="gn" placeholder="Nom del grup (p. ex. Nadal família)" value="${esc(gn)}"><button class="chip pri" data-a="newg" style="width:100%">Crea el grup</button></div>`}
+function groupView(){
+ const back=`<button class="chip" data-a="back">← Els meus grups</button>`;
+ if(G===undefined||M===undefined)return "<p class='sub'>Carregant…</p>";
+ if(G===null)return `<p class="note">Aquest grup no existeix.</p>${back}`;
+ const adm=G.admin===U.uid,me=M&&M[U.uid];
+ let h=`${back}<h2 style="font-size:18px;margin-top:14px">${esc(G.name)}${adm?'<span class="bd">admin</span>':""}</h2>`;
+ if(!me){
+  if(G.drawn)h+=`<p class="note">El sorteig d'aquest grup ja s'ha fet: no t'hi pots apuntar.</p>`;
+  else{const ns=Object.values(G.nuclis||{}).sort((a,b)=>a.localeCompare(b));
+   h+=`<h2>Apunta't al grup</h2><div class="card"><label>El teu nom</label><input id="nm" value="${esc(dn||U.displayName||"")}"><label style="display:block;margin-top:8px">El teu nucli familiar</label><div class="chips" style="margin:6px 0">${ns.map(f=>`<button class="chip${sel===f?" on":""}" data-f="${esc(f)}">${esc(f)}</button>`).join("")}<button class="chip${sel==="__new"?" on":""}" data-f="__new">＋ Nou nucli</button></div>${sel==="__new"?`<input id="nf" placeholder="Nom del nou nucli" value="${esc(df)}">`:""}<label style="display:block;margin-top:8px">Què t'agradaria rebre? (opcional)</label><textarea id="dw" rows="3">${esc(dw)}</textarea><button class="chip pri" data-a="join" style="width:100%;margin-top:8px">Apunta'm</button></div>`}}
+ else{
+  h+=`<p class="sub">Hola, <b>${esc(me.n)}</b> · ${esc(me.f)}</p>`;
+  if(G.drawn){const t=shown&&mine?M[mine]:null;
+   h+=`<div class="card c">${!mine?`<p class="sub">No participes en aquest sorteig.</p>`:shown?`<div class="big">${t?esc(t.n):"?"}</div><p class="sub" style="margin:0">és el teu amic invisible 🤫</p>${t&&t.w?`<h2 style="text-align:left">Què li agradaria rebre</h2><div class="wl">${esc(t.w).replace(/\n/g,"<br>")}</div>`:`<p class="sub">Encara no ha afegit cap idea de regal.</p>`}<button class="chip" data-a="hide" style="margin-top:12px">Amaga</button>`:`<p class="sub" style="margin:0">El sorteig ja s'ha fet</p><button class="chip pri" data-a="show" style="margin:12px 0 4px">Veure a qui li faig el regal</button>`}</div>`}
+  else h+=`<div class="card"><p style="margin:0">Estàs apuntat/da. Quan l'administrador faci el sorteig, aquí et sortirà a qui li has de fer el regal.</p></div>`;
+  h+=`<h2>La meva llista de desitjos</h2><div class="card"><textarea id="mw" rows="4" placeholder="Llibres, un joc de taula, te...">${esc(mwd!==null?mwd:(me.w||""))}</textarea><button class="chip pri" data-a="savew" style="width:100%">Desa</button></div>`;
+  h+=`<h2>Qui participa</h2><div class="card">${people(byN())}</div>`}
+ if(adm){const n=Object.keys(M||{}).length,url=location.origin+location.pathname+"?g="+gid,bn=byN();
+  Object.values(bn).forEach(a=>a.forEach(p=>p.x=1));
+  h+=`<h2>Administrador</h2><div class="card"><p class="sub" style="margin-top:0">Convida gent compartint aquest enllaç. Cada persona entrarà amb el seu compte de Google i es podrà apuntar.</p><div class="row2"><input readonly value="${esc(url)}" onclick="this.select()"><button class="chip" data-a="share">Comparteix</button></div></div>
+  <div class="card" style="margin-top:12px"><p class="sub" style="margin-top:0">${n} participants en ${Object.keys(bn).length} nuclis.</p>${people(bn)}
+  <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">${G.drawn?`<button class="chip" data-a="reset">↺ Reiniciar sorteig</button><button class="chip" data-a="vis">${showAll?"Amaga el resultat":"👁 Mostra el resultat del sorteig"}</button>`:`<button class="chip pri" data-a="draw">🎲 Fer el sorteig</button>`}<button class="chip" data-a="delg">🗑 Esborrar grup</button></div>
+  ${showAll&&all?`<div class="g">Resultat del sorteig</div>${Object.entries(all).map(([a,b])=>`<div class="p"><span>${esc(M[a]?M[a].n:"?")} → ${esc(M[b]?M[b].n:"?")}</span></div>`).join("")}`:""}</div>`}
+ return h}
+function render(){const a=$("app");
+ if(!ok){a.innerHTML=`<p class="note">Falta la configuració de Firebase: enganxa el bloc <b>firebaseConfig</b> al fitxer (vegeu les instruccions).</p>`;return}
+ if(U===undefined){a.innerHTML="<p class='sub'>Carregant…</p>";return}
+ $("top").innerHTML=U?`<p class="sub" style="text-align:center">${esc(U.displayName||U.email)} · <a href="#" data-a="out">Sortir</a></p>`:"";
+ if(!U){a.innerHTML=`<div class="card c"><p>Entra amb el teu compte de Google per crear grups d'amic invisible o unir-te a un grup.</p><button class="chip pri" data-a="in">Entra amb Google</button></div>`;return}
+ a.innerHTML=gid?groupView():listView()}
+document.addEventListener("input",e=>{const i=e.target.id;if(i==="nm")dn=e.target.value;if(i==="nf")df=e.target.value;if(i==="dw")dw=e.target.value;if(i==="mw")mwd=e.target.value;if(i==="gn")gn=e.target.value});
+document.addEventListener("click",async e=>{const g=s=>e.target.closest(s);let el;
+ try{
+ if(el=g("[data-open]")){openGroup(el.dataset.open);return}
+ if(el=g("[data-f]")){sel=el.dataset.f;render();return}
+ if(el=g("[data-del]")){const id=el.dataset.del;if(!confirm("Esborrar "+M[id].n+" del grup?"+(G.drawn?" Això anul·la el sorteig.":"")))return;
+  const u={["members/"+gid+"/"+id]:null};if(G.drawn){u["assign/"+gid]=null;u["groups/"+gid+"/drawn"]=false}await update(ref(db),u);return}
+ const a=(g("[data-a]")||{dataset:{}}).dataset.a;if(!a)return;
+ if(a==="in")await signInWithPopup(auth,new GoogleAuthProvider());
+ else if(a==="out"){e.preventDefault();await signOut(auth)}
+ else if(a==="back")openGroup(null);
+ else if(a==="newg"){const name=gn.trim();if(!name)return;const id=push(ref(db,"groups")).key;
+  await update(ref(db),{["groups/"+id]:{name,admin:U.uid,drawn:false,created:Date.now()},["userGroups/"+U.uid+"/"+id]:true});gn="";openGroup(id)}
+ else if(a==="join"){const n=(dn||U.displayName||"").trim();let f=sel==="__new"?df.trim():sel;if(!n||!f)return alert("Posa el teu nom i tria un nucli.");
+  const ex=Object.values(G.nuclis||{}).find(x=>x.toLowerCase()===f.toLowerCase()),u={};
+  if(ex)f=ex;else u["groups/"+gid+"/nuclis/"+slug(f)]=f;
+  u["members/"+gid+"/"+U.uid]={n,f,w:dw.trim()};u["userGroups/"+U.uid+"/"+gid]=true;await update(ref(db),u);dw="";openGroup(gid)}
+ else if(a==="show"){shown=true;render()}else if(a==="hide"){shown=false;render()}
+ else if(a==="savew"){const w=$("mw").value.trim();mwd=null;await update(ref(db),{["members/"+gid+"/"+U.uid+"/w"]:w});render()}
+ else if(a==="share"){const url=location.origin+location.pathname+"?g="+gid;if(navigator.share)navigator.share({title:G.name,url}).catch(()=>{});else{await navigator.clipboard.writeText(url);alert("Enllaç copiat")}}
+ else if(a==="draw"){const d=makeDraw();if(!d)return alert("No es pot fer el sorteig: calen almenys 2 persones i cap nucli pot tenir més de la meitat dels participants.");
+  if(!confirm("Fer el sorteig ara? Ja no es podran apuntar més persones."))return;await update(ref(db),{["assign/"+gid]:d,["groups/"+gid+"/drawn"]:true})}
+ else if(a==="reset"){if(!confirm("Reiniciar el sorteig?"))return;showAll=false;all=null;await update(ref(db),{["assign/"+gid]:null,["groups/"+gid+"/drawn"]:false})}
+ else if(a==="vis"){if(showAll){showAll=false;all=null}else{all=(await get(ref(db,"assign/"+gid))).val();showAll=!!all}render()}
+ else if(a==="delg"){if(!confirm("Esborrar el grup «"+G.name+"» i totes les seves dades?"))return;
+  const id=gid;openGroup(null);await update(ref(db),{["groups/"+id]:null,["members/"+id]:null,["assign/"+id]:null,["userGroups/"+U.uid+"/"+id]:null})}
+ }catch(err){fail(err)}});
+if(ok)onAuthStateChanged(auth,u=>{U=u;subs.forEach(f=>f());subs=[];
+ if(u){subs.push(onValue(ref(db,"userGroups/"+u.uid),async s=>{const ids=Object.keys(s.val()||{});
+   const r=await Promise.all(ids.map(i=>get(ref(db,"groups/"+i)).then(x=>[i,x.val()],()=>[i,null])));myG=Object.fromEntries(r.filter(x=>x[1]));rr()}));
+  if(gid)openGroup(gid);else render()}else render()});
+render();
+(()=>{const s=$("snow");if(matchMedia("(prefers-reduced-motion: reduce)").matches)return;for(let i=0;i<28;i++){const f=document.createElement("i");f.textContent="❄";f.style.cssText=`left:${Math.random()*100}%;font-size:${8+Math.random()*14}px;animation-duration:${8+Math.random()*10}s;animation-delay:${-Math.random()*14}s;opacity:${.3+Math.random()*.5}`;s.appendChild(f)}})();
+</script></body></html>
