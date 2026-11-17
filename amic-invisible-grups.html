@@ -43,111 +43,118 @@ h2{color:var(--grn)}h2::before{content:"❄ ";color:var(--gold)}
 @media (prefers-reduced-motion:reduce){#snow{display:none}.garland,.card.c::before{animation:none}}
 
 .bd{font-size:11px;background:var(--gold);color:#222;border-radius:6px;padding:1px 6px;margin-left:6px;font-weight:700}
-a{color:var(--grn)}.row2{display:flex;gap:8px}.row2 input{flex:1}
+a{color:var(--grn)}.row2{display:flex;gap:8px;margin:6px 0}.row2 input{flex:1}.x{font-size:16px}
 </style></head><body><main>
 <div id="snow"></div><div class="garland"></div><h1>🎄 Amic invisible 🎁</h1><div id="top"></div><div id="app"></div>
 </main>
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-import {getAuth,GoogleAuthProvider,signInWithPopup,onAuthStateChanged,signOut} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
-import {getDatabase,ref,onValue,get,update,push} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
+import {getAuth,GoogleAuthProvider,signInWithPopup,signInAnonymously,onAuthStateChanged,signOut} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+import {getDatabase,ref,onValue,get,set,update,push} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
 // ⬇️ Enganxa aquí la configuració de la teva app web de Firebase
-const firebaseConfig = {
-  apiKey: "AIzaSyAU7ACsDdfzqUyNIzrgFlp2gfnvDtSWdwg",
-  authDomain: "canut-compartit.firebaseapp.com",
-  databaseURL: "https://canut-compartit-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "canut-compartit",
-  storageBucket: "canut-compartit.firebasestorage.app",
-  messagingSenderId: "182718025796",
-  appId: "1:182718025796:web:c444d37d48e47a7f32ac11"
-};
+const firebaseConfig={apiKey:"AIzaSyAU7ACsDdfzqUyNIzrgFlp2gfnvDtSWdwg",authDomain:"canut-compartit.firebaseapp.com",databaseURL:"https://canut-compartit-default-rtdb.europe-west1.firebasedatabase.app",projectId:"canut-compartit",storageBucket:"canut-compartit.firebasestorage.app",messagingSenderId:"182718025796",appId:"1:182718025796:web:c444d37d48e47a7f32ac11"};
 const $=id=>document.getElementById(id);
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const slug=s=>s.toLowerCase().normalize("NFD").replace(/[^a-z0-9]/g,"")||"n";
 const ok=!!firebaseConfig.apiKey;let auth,db;
 if(ok){const app=initializeApp(firebaseConfig);auth=getAuth(app);db=getDatabase(app)}
-let U,gid=new URLSearchParams(location.search).get("g"),G,M,mine=null,myG={},subs=[],shown=false,showAll=false,all=null,sel=null,dn="",df="",dw="",mwd=null,gn="";
+const qs=new URLSearchParams(location.search);
+let U,gid=qs.get("g"),tp=qs.get("p"),tt=qs.get("t"),G,R,C,T,mine=null,myG={},subs=[],subM=null,shown=false,showAll=false,all=null,
+ linkFor=null,an="",af="",asel=null,mwd=null,gn="",entering=false;
 const busy=()=>/INPUT|TEXTAREA/.test((document.activeElement||{}).tagName||"");
 const rr=()=>{if(!busy())render()};
 const fail=e=>alert("No s'ha pogut fer: "+((e&&e.code)||e||"error"));
-function openGroup(id){subs.forEach(f=>f());subs=[];gid=id;G=undefined;M=undefined;mine=null;shown=false;showAll=false;all=null;sel=null;
+const myPid=()=>C&&U?Object.keys(C).find(p=>C[p]===U.uid):null;
+const plink=p=>location.origin+location.pathname+"?g="+gid+"&p="+p+"&t="+T[p];
+function watchMine(){const p=myPid();if(subM&&subM.p===p)return;if(subM)subM.f();subM=null;mine=null;
+ if(p)subM={p,f:onValue(ref(db,"assign/"+gid+"/"+p),s=>{mine=s.val();rr()},()=>{})}}
+function openGroup(id){subs.forEach(f=>f());subs=[];if(subM){subM.f();subM=null}gid=id;G=R=C=T=undefined;mine=null;shown=showAll=false;all=null;linkFor=null;asel=null;
  history.replaceState(null,"",id?"?g="+id:location.pathname);if(!id){render();return}
  subs.push(onValue(ref(db,"groups/"+id),s=>{G=s.val();rr()},()=>{G=null;rr()}));
- subs.push(onValue(ref(db,"members/"+id),s=>{M=s.val()||{};rr()},()=>{M=null;rr()}));
- subs.push(onValue(ref(db,"assign/"+id+"/"+U.uid),s=>{mine=s.val();rr()},()=>{}))}
-function makeDraw(){const P=Object.entries(M).map(([id,v])=>({id,f:v.f})),n=P.length;if(n<2)return null;const g={};P.forEach(p=>g[p.f]=(g[p.f]||0)+1);const gm=Math.max(...Object.values(g));if(gm*2>n)return null;
- const R=()=>{const b=new Uint32Array(1);crypto.getRandomValues(b);return b[0]/4294967296};
- const sh=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(R()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+ subs.push(onValue(ref(db,"roster/"+id),s=>{R=s.val()||{};rr()},()=>{R={};rr()}));
+ subs.push(onValue(ref(db,"claims/"+id),s=>{C=s.val()||{};watchMine();rr()},()=>{C={};rr()}));
+ subs.push(onValue(ref(db,"tokens/"+id),s=>{T=s.val()||{};rr()},()=>{T={}}))}
+function makeDraw(){const P=Object.entries(R).map(([id,v])=>({id,f:v.f})),n=P.length;if(n<2)return null;const g={};P.forEach(p=>g[p.f]=(g[p.f]||0)+1);const gm=Math.max(...Object.values(g));if(gm*2>n)return null;
+ const Rn=()=>{const b=new Uint32Array(1);crypto.getRandomValues(b);return b[0]/4294967296};
+ const sh=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Rn()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
  for(let t=0;t<2000;t++){const b=sh(P);if(P.every((p,i)=>p.f!==b[i].f))return Object.fromEntries(P.map((p,i)=>[p.id,b[i].id]))}
  const grp={};P.forEach(p=>(grp[p.f]=grp[p.f]||[]).push(p));
- const L=sh(Object.values(grp).map(sh)).flat(),s=gm+Math.floor(R()*(n-2*gm+1));
+ const L=sh(Object.values(grp).map(sh)).flat(),s=gm+Math.floor(Rn()*(n-2*gm+1));
  return Object.fromEntries(L.map((p,i)=>[p.id,L[(i+s)%n].id]))}
-const byN=()=>{const o={};Object.entries(M||{}).forEach(([id,v])=>(o[v.f]=o[v.f]||[]).push({id,...v}));return o};
-const people=o=>Object.entries(o).sort().map(([f,a])=>`<div class="g">${esc(f)}</div>${a.map(p=>`<div class="p"><span>${esc(p.n)}</span>${p.x?`<button class="x" data-del="${p.id}">✕</button>`:""}</div>`).join("")}`).join("");
+const byN=()=>{const o={};Object.entries(R||{}).forEach(([id,v])=>(o[v.f]=o[v.f]||[]).push({id,...v}));return o};
+const nucs=()=>[...new Set(Object.values(R||{}).map(v=>v.f))].sort((a,b)=>a.localeCompare(b));
 function listView(){const ids=Object.keys(myG);
  return `<h2>Els meus grups</h2>${ids.length?`<div class="card">${ids.map(i=>`<div class="p"><span>${esc(myG[i].name)}${myG[i].admin===U.uid?'<span class="bd">admin</span>':""}</span><button class="chip" data-open="${i}">Obrir</button></div>`).join("")}</div>`:`<p class="note">Encara no tens cap grup. Crea'n un o obre l'enllaç que t'hagin enviat.</p>`}
  <h2>Crea un grup nou</h2><div class="card"><input id="gn" placeholder="Nom del grup (p. ex. Nadal família)" value="${esc(gn)}"><button class="chip pri" data-a="newg" style="width:100%">Crea el grup</button></div>`}
 function groupView(){
- const back=`<button class="chip" data-a="back">← Els meus grups</button>`;
- if(G===undefined||M===undefined)return "<p class='sub'>Carregant…</p>";
+ const back=U.isAnonymous?"":`<button class="chip" data-a="back">← Els meus grups</button>`;
+ if(G===undefined||R===undefined||C===undefined)return "<p class='sub'>Carregant…</p>";
  if(G===null)return `<p class="note">Aquest grup no existeix.</p>${back}`;
- const adm=G.admin===U.uid,me=M&&M[U.uid];
+ const adm=G.admin===U.uid,pid=myPid(),me=pid&&R[pid];
  let h=`${back}<h2 style="font-size:18px;margin-top:14px">${esc(G.name)}${adm?'<span class="bd">admin</span>':""}</h2>`;
  if(!me){
-  if(G.drawn)h+=`<p class="note">El sorteig d'aquest grup ja s'ha fet: no t'hi pots apuntar.</p>`;
-  else{const ns=Object.values(G.nuclis||{}).sort((a,b)=>a.localeCompare(b));
-   h+=`<h2>Apunta't al grup</h2><div class="card"><label>El teu nom</label><input id="nm" value="${esc(dn||U.displayName||"")}"><label style="display:block;margin-top:8px">El teu nucli familiar</label><div class="chips" style="margin:6px 0">${ns.map(f=>`<button class="chip${sel===f?" on":""}" data-f="${esc(f)}">${esc(f)}</button>`).join("")}<button class="chip${sel==="__new"?" on":""}" data-f="__new">＋ Nou nucli</button></div>${sel==="__new"?`<input id="nf" placeholder="Nom del nou nucli" value="${esc(df)}">`:""}<label style="display:block;margin-top:8px">Què t'agradaria rebre? (opcional)</label><textarea id="dw" rows="3">${esc(dw)}</textarea><button class="chip pri" data-a="join" style="width:100%;margin-top:8px">Apunta'm</button></div>`}}
+  const free=Object.entries(R).filter(([id])=>!C[id]);
+  h+=`<h2>Qui ets?</h2><div class="card">${free.length?`<p class="sub" style="margin-top:0">Tria el teu nom de la llista:</p>${free.map(([id,v])=>`<div class="p"><span>${esc(v.n)} <span class="sub">· ${esc(v.f)}</span></span><button class="chip" data-claim="${id}">Sóc jo</button></div>`).join("")}`:`<p class="sub" style="margin:0">${Object.keys(R).length?"Tots els noms ja estan agafats. Si t'has equivocat, demana a l'administrador que te'l alliberi.":"L'administrador encara no ha afegit cap nom."}</p>`}</div>`}
  else{
   h+=`<p class="sub">Hola, <b>${esc(me.n)}</b> · ${esc(me.f)}</p>`;
-  if(G.drawn){const t=shown&&mine?M[mine]:null;
-   h+=`<div class="card c">${!mine?`<p class="sub">No participes en aquest sorteig.</p>`:shown?`<div class="big">${t?esc(t.n):"?"}</div><p class="sub" style="margin:0">és el teu amic invisible 🤫</p>${t&&t.w?`<h2 style="text-align:left">Què li agradaria rebre</h2><div class="wl">${esc(t.w).replace(/\n/g,"<br>")}</div>`:`<p class="sub">Encara no ha afegit cap idea de regal.</p>`}<button class="chip" data-a="hide" style="margin-top:12px">Amaga</button>`:`<p class="sub" style="margin:0">El sorteig ja s'ha fet</p><button class="chip pri" data-a="show" style="margin:12px 0 4px">Veure a qui li faig el regal</button>`}</div>`}
-  else h+=`<div class="card"><p style="margin:0">Estàs apuntat/da. Quan l'administrador faci el sorteig, aquí et sortirà a qui li has de fer el regal.</p></div>`;
+  if(G.drawn){const t=shown&&mine?R[mine]:null;
+   h+=`<div class="card c">${!mine?`<p class="sub">No s'ha trobat el teu resultat.</p>`:shown?`<div class="big">${t?esc(t.n):"?"}</div><p class="sub" style="margin:0">és el teu amic invisible 🤫</p>${t&&t.w?`<h2 style="text-align:left">Què li agradaria rebre</h2><div class="wl">${esc(t.w).replace(/\n/g,"<br>")}</div>`:`<p class="sub">Encara no ha afegit cap idea de regal.</p>`}<button class="chip" data-a="hide" style="margin-top:12px">Amaga</button>`:`<p class="sub" style="margin:0">El sorteig ja s'ha fet</p><button class="chip pri" data-a="show" style="margin:12px 0 4px">Veure a qui li faig el regal</button>`}</div>`}
+  else h+=`<div class="card"><p style="margin:0">Ja estàs dins. Quan l'administrador faci el sorteig, torna a entrar i aquí et sortirà a qui li has de fer el regal.</p></div>`;
   h+=`<h2>La meva llista de desitjos</h2><div class="card"><textarea id="mw" rows="4" placeholder="Llibres, un joc de taula, te...">${esc(mwd!==null?mwd:(me.w||""))}</textarea><button class="chip pri" data-a="savew" style="width:100%">Desa</button></div>`;
-  h+=`<h2>Qui participa</h2><div class="card">${people(byN())}</div>`}
- if(adm){const n=Object.keys(M||{}).length,url=location.origin+location.pathname+"?g="+gid,bn=byN();
-  Object.values(bn).forEach(a=>a.forEach(p=>p.x=1));
-  h+=`<h2>Administrador</h2><div class="card"><p class="sub" style="margin-top:0">Convida gent compartint aquest enllaç. Cada persona entrarà amb el seu compte de Google i es podrà apuntar.</p><div class="row2"><input readonly value="${esc(url)}" onclick="this.select()"><button class="chip" data-a="share">Comparteix</button></div></div>
-  <div class="card" style="margin-top:12px"><p class="sub" style="margin-top:0">${n} participants en ${Object.keys(bn).length} nuclis.</p>${people(bn)}
+  h+=`<h2>Qui participa</h2><div class="card">${Object.entries(byN()).sort().map(([f,a])=>`<div class="g">${esc(f)}</div>${a.map(p=>`<div class="p"><span>${esc(p.n)}${C[p.id]?" ✓":""}</span></div>`).join("")}`).join("")}</div>`}
+ if(adm){const url=location.origin+location.pathname+"?g="+gid,bn=byN(),n=Object.keys(R).length;
+  h+=`<h2>Administrador</h2><div class="card"><p class="sub" style="margin-top:0">Comparteix aquest enllaç amb la família. Qui l'obri entrarà amb Google i triarà quin nom és.</p><div class="row2"><input readonly value="${esc(url)}" onclick="this.select()"><button class="chip" data-a="share">Comparteix</button></div></div>
+  <div class="card" style="margin-top:12px"><p class="sub" style="margin-top:0"><b>Afegeix participants</b> (només nom i nucli)</p><input id="an" placeholder="Nom" value="${esc(an)}"><div class="chips" style="margin:6px 0">${nucs().map(f=>`<button class="chip${asel===f?" on":""}" data-af="${esc(f)}">${esc(f)}</button>`).join("")}<button class="chip${asel==="__new"?" on":""}" data-af="__new">＋ Nou nucli</button></div>${asel==="__new"?`<input id="af" placeholder="Nom del nou nucli" value="${esc(af)}">`:""}<button class="chip pri" data-a="addp" style="width:100%">Afegeix</button></div>
+  <div class="card" style="margin-top:12px"><p class="sub" style="margin-top:0">${n} participants en ${Object.keys(bn).length} nuclis. 🔗 = enllaç personal (per a qui no té Google), ↩ = allibera el nom.</p>
+  ${Object.entries(bn).sort().map(([f,a])=>`<div class="g">${esc(f)}</div>${a.map(p=>`<div class="p"><span>${esc(p.n)}${C[p.id]?'<span class="bd">dins</span>':""}</span><span><button class="x" data-link="${p.id}">🔗</button>${C[p.id]?`<button class="x" data-free="${p.id}">↩</button>`:""}<button class="x" data-del="${p.id}">✕</button></span></div>${linkFor===p.id&&T&&T[p.id]?`<div class="row2"><input readonly value="${esc(plink(p.id))}" onclick="this.select()"><button class="chip" data-copy="${p.id}">Copia</button></div>`:""}`).join("")}`).join("")}
   <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">${G.drawn?`<button class="chip" data-a="reset">↺ Reiniciar sorteig</button><button class="chip" data-a="vis">${showAll?"Amaga el resultat":"👁 Mostra el resultat del sorteig"}</button>`:`<button class="chip pri" data-a="draw">🎲 Fer el sorteig</button>`}<button class="chip" data-a="delg">🗑 Esborrar grup</button></div>
-  ${showAll&&all?`<div class="g">Resultat del sorteig</div>${Object.entries(all).map(([a,b])=>`<div class="p"><span>${esc(M[a]?M[a].n:"?")} → ${esc(M[b]?M[b].n:"?")}</span></div>`).join("")}`:""}</div>`}
+  ${showAll&&all?`<div class="g">Resultat del sorteig</div>${Object.entries(all).map(([a,b])=>`<div class="p"><span>${esc(R[a]?R[a].n:"?")} → ${esc(R[b]?R[b].n:"?")}</span></div>`).join("")}`:""}</div>`}
  return h}
 function render(){const a=$("app");
- if(!ok){a.innerHTML=`<p class="note">Falta la configuració de Firebase: enganxa el bloc <b>firebaseConfig</b> al fitxer (vegeu les instruccions).</p>`;return}
- if(U===undefined){a.innerHTML="<p class='sub'>Carregant…</p>";return}
- $("top").innerHTML=U?`<p class="sub" style="text-align:center">${esc(U.displayName||U.email)} · <a href="#" data-a="out">Sortir</a></p>`:"";
+ if(!ok){a.innerHTML=`<p class="note">Falta la configuració de Firebase: enganxa el bloc <b>firebaseConfig</b> al fitxer.</p>`;return}
+ if(U===undefined||entering){a.innerHTML="<p class='sub' style='text-align:center'>Entrant…</p>";return}
+ $("top").innerHTML=U&&!U.isAnonymous?`<p class="sub" style="text-align:center">${esc(U.displayName||U.email)} · <a href="#" data-a="out">Sortir</a></p>`:"";
  if(!U){a.innerHTML=`<div class="card c"><p>Entra amb el teu compte de Google per crear grups d'amic invisible o unir-te a un grup.</p><button class="chip pri" data-a="in">Entra amb Google</button></div>`;return}
  a.innerHTML=gid?groupView():listView()}
-document.addEventListener("input",e=>{const i=e.target.id;if(i==="nm")dn=e.target.value;if(i==="nf")df=e.target.value;if(i==="dw")dw=e.target.value;if(i==="mw")mwd=e.target.value;if(i==="gn")gn=e.target.value});
-document.addEventListener("click",async e=>{const g=s=>e.target.closest(s);let el;
+document.addEventListener("input",e=>{const i=e.target.id;if(i==="an")an=e.target.value;if(i==="af")af=e.target.value;if(i==="mw")mwd=e.target.value;if(i==="gn")gn=e.target.value});
+document.addEventListener("click",async e=>{const g=s=>e.target.closest(s);let el;const P=(o)=>update(ref(db),o);
  try{
  if(el=g("[data-open]")){openGroup(el.dataset.open);return}
- if(el=g("[data-f]")){sel=el.dataset.f;render();return}
- if(el=g("[data-del]")){const id=el.dataset.del;if(!confirm("Esborrar "+M[id].n+" del grup?"+(G.drawn?" Això anul·la el sorteig.":"")))return;
-  const u={["members/"+gid+"/"+id]:null};if(G.drawn){u["assign/"+gid]=null;u["groups/"+gid+"/drawn"]=false}await update(ref(db),u);return}
+ if(el=g("[data-af]")){asel=el.dataset.af;render();return}
+ if(el=g("[data-claim]")){const p=el.dataset.claim;await P({["claims/"+gid+"/"+p]:U.uid,["userGroups/"+U.uid+"/"+gid]:true});return}
+ if(el=g("[data-link]")){const p=el.dataset.link;if(!T[p]){const t=crypto.randomUUID().replace(/-/g,"")+crypto.randomUUID().replace(/-/g,"");await set(ref(db,"tokens/"+gid+"/"+p),t);T[p]=t}linkFor=p;render();return}
+ if(el=g("[data-copy]")){await navigator.clipboard.writeText(plink(el.dataset.copy));el.textContent="Copiat ✓";return}
+ if(el=g("[data-free]")){const p=el.dataset.free;if(!confirm("Alliberar «"+R[p].n+"»? Aquesta persona deixarà d'estar dins i l'enllaç personal es revoca."))return;await P({["claims/"+gid+"/"+p]:null,["tokens/"+gid+"/"+p]:null});return}
+ if(el=g("[data-del]")){const p=el.dataset.del;if(!confirm("Esborrar "+R[p].n+"?"+(G.drawn?" Això anul·la el sorteig.":"")))return;
+  const o={["roster/"+gid+"/"+p]:null,["claims/"+gid+"/"+p]:null,["tokens/"+gid+"/"+p]:null};if(G.drawn){o["assign/"+gid]=null;o["groups/"+gid+"/drawn"]=false}await P(o);return}
  const a=(g("[data-a]")||{dataset:{}}).dataset.a;if(!a)return;
  if(a==="in")await signInWithPopup(auth,new GoogleAuthProvider());
  else if(a==="out"){e.preventDefault();await signOut(auth)}
  else if(a==="back")openGroup(null);
  else if(a==="newg"){const name=gn.trim();if(!name)return;const id=push(ref(db,"groups")).key;
-  await update(ref(db),{["groups/"+id]:{name,admin:U.uid,drawn:false,created:Date.now()},["userGroups/"+U.uid+"/"+id]:true});gn="";openGroup(id)}
- else if(a==="join"){const n=(dn||U.displayName||"").trim();let f=sel==="__new"?df.trim():sel;if(!n||!f)return alert("Posa el teu nom i tria un nucli.");
-  const ex=Object.values(G.nuclis||{}).find(x=>x.toLowerCase()===f.toLowerCase()),u={};
-  if(ex)f=ex;else u["groups/"+gid+"/nuclis/"+slug(f)]=f;
-  u["members/"+gid+"/"+U.uid]={n,f,w:dw.trim()};u["userGroups/"+U.uid+"/"+gid]=true;await update(ref(db),u);dw="";openGroup(gid)}
+  await P({["groups/"+id]:{name,admin:U.uid,drawn:false,created:Date.now()},["userGroups/"+U.uid+"/"+id]:true});gn="";openGroup(id)}
+ else if(a==="addp"){const n=an.trim();let f=asel==="__new"?af.trim():asel;if(!n||!f)return alert("Posa un nom i tria un nucli.");
+  f=nucs().find(x=>x.toLowerCase()===f.toLowerCase())||f;const id=push(ref(db,"roster/"+gid)).key;await set(ref(db,"roster/"+gid+"/"+id),{n,f,w:""});an="";af="";asel=f;render()}
  else if(a==="show"){shown=true;render()}else if(a==="hide"){shown=false;render()}
- else if(a==="savew"){const w=$("mw").value.trim();mwd=null;await update(ref(db),{["members/"+gid+"/"+U.uid+"/w"]:w});render()}
+ else if(a==="savew"){const w=$("mw").value.trim();mwd=null;await set(ref(db,"roster/"+gid+"/"+myPid()+"/w"),w);render()}
  else if(a==="share"){const url=location.origin+location.pathname+"?g="+gid;if(navigator.share)navigator.share({title:G.name,url}).catch(()=>{});else{await navigator.clipboard.writeText(url);alert("Enllaç copiat")}}
  else if(a==="draw"){const d=makeDraw();if(!d)return alert("No es pot fer el sorteig: calen almenys 2 persones i cap nucli pot tenir més de la meitat dels participants.");
-  if(!confirm("Fer el sorteig ara? Ja no es podran apuntar més persones."))return;await update(ref(db),{["assign/"+gid]:d,["groups/"+gid+"/drawn"]:true})}
- else if(a==="reset"){if(!confirm("Reiniciar el sorteig?"))return;showAll=false;all=null;await update(ref(db),{["assign/"+gid]:null,["groups/"+gid+"/drawn"]:false})}
+  if(!confirm("Fer el sorteig ara?"))return;await P({["assign/"+gid]:d,["groups/"+gid+"/drawn"]:true})}
+ else if(a==="reset"){if(!confirm("Reiniciar el sorteig?"))return;showAll=false;all=null;await P({["assign/"+gid]:null,["groups/"+gid+"/drawn"]:false})}
  else if(a==="vis"){if(showAll){showAll=false;all=null}else{all=(await get(ref(db,"assign/"+gid))).val();showAll=!!all}render()}
- else if(a==="delg"){if(!confirm("Esborrar el grup «"+G.name+"» i totes les seves dades?"))return;
-  const id=gid;openGroup(null);await update(ref(db),{["groups/"+id]:null,["members/"+id]:null,["assign/"+id]:null,["userGroups/"+U.uid+"/"+id]:null})}
+ else if(a==="delg"){if(!confirm("Esborrar el grup «"+G.name+"» i totes les seves dades?"))return;const id=gid;openGroup(null);
+  await P({["groups/"+id]:null,["roster/"+id]:null,["claims/"+id]:null,["tokens/"+id]:null,["assign/"+id]:null,["redeem/"+id]:null,["userGroups/"+U.uid+"/"+id]:null})}
  }catch(err){fail(err)}});
-if(ok)onAuthStateChanged(auth,u=>{U=u;subs.forEach(f=>f());subs=[];
- if(u){subs.push(onValue(ref(db,"userGroups/"+u.uid),async s=>{const ids=Object.keys(s.val()||{});
-   const r=await Promise.all(ids.map(i=>get(ref(db,"groups/"+i)).then(x=>[i,x.val()],()=>[i,null])));myG=Object.fromEntries(r.filter(x=>x[1]));rr()}));
-  if(gid)openGroup(gid);else render()}else render()});
+if(ok)onAuthStateChanged(auth,async u=>{
+ if(!u&&tp&&tt&&gid){try{await signInAnonymously(auth)}catch(e){fail(e)}return}
+ U=u;subs.forEach(f=>f());subs=[];
+ if(!u){render();return}
+ subs.push(onValue(ref(db,"userGroups/"+u.uid),async s=>{const ids=Object.keys(s.val()||{});
+  const r=await Promise.all(ids.map(i=>get(ref(db,"groups/"+i)).then(x=>[i,x.val()],()=>[i,null])));myG=Object.fromEntries(r.filter(x=>x[1]));rr()}));
+ if(tp&&tt&&gid){entering=true;render();
+  try{await set(ref(db,"redeem/"+gid+"/"+tp+"/"+tt),u.uid);await update(ref(db),{["claims/"+gid+"/"+tp]:u.uid,["userGroups/"+u.uid+"/"+gid]:true})}
+  catch(e){alert("L'enllaç personal no és vàlid o ha estat revocat. Demana'n un de nou a l'administrador.")}
+  tp=tt=null;entering=false}
+ if(gid)openGroup(gid);else render()});
 render();
 (()=>{const s=$("snow");if(matchMedia("(prefers-reduced-motion: reduce)").matches)return;for(let i=0;i<28;i++){const f=document.createElement("i");f.textContent="❄";f.style.cssText=`left:${Math.random()*100}%;font-size:${8+Math.random()*14}px;animation-duration:${8+Math.random()*10}s;animation-delay:${-Math.random()*14}s;opacity:${.3+Math.random()*.5}`;s.appendChild(f)}})();
 </script></body></html>
